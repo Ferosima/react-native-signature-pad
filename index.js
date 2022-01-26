@@ -120,6 +120,10 @@ export default class SignaturePad extends Component {
     this.web.reload();
   };
 
+  getBase64Data = () => {
+    return this.state.base64DataUrl;
+  };
+
   render = () => {
     return (
       <WebView
