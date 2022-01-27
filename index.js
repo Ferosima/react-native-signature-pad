@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 import React, { Component } from "react";
 import { StyleSheet, View, ViewPropTypes } from "react-native";
+import { StyleSheet, View, ViewPropTypes } from "react-native";
+import { WebView } from "react-native-webview";
 import { WebView } from "react-native-webview";
 
 import htmlContent from "./injectedHtml";
@@ -33,11 +37,13 @@ export default class SignaturePad extends Component {
       injectedErrorHandler +
       injectedSignaturePad +
       injectedApplication(props.penColor, backgroundColor, props.dataURL);
+
     var html = htmlContent(injectedJavaScript); //We don't use WebView's injectedJavaScript because on Android, the WebView re-injects the JavaScript upon every url change. Given that we use url changes to communicate signature changes to the React Native app, the JS is re-injected every time a stroke is drawn.
     this.state = {
       base64DataUrl: props.dataURL || null,
-      source: { html },
+      key: 1,
     };
+    this.source = { html };
   }
 
   _onNavigationChange = (args) => {
@@ -117,7 +123,7 @@ export default class SignaturePad extends Component {
   };
 
   reload = () => {
-    this.web.reload();
+    this.setState({ key: this.state.key + 1 });
   };
 
   getBase64Data = () => {
@@ -127,12 +133,13 @@ export default class SignaturePad extends Component {
   render = () => {
     return (
       <WebView
+        key={this.state.key} //for reload webview
         ref={(ref) => (this.web = ref)}
         onNavigationStateChange={this._onNavigationChange}
         onMessage={this.onMessage}
         renderError={this._renderError}
         renderLoading={this._renderLoading}
-        source={this.state.source}
+        source={this.source}
         javaScriptEnabled={true}
         startInLoadingState={true}
         style={this.props.style}
