@@ -1,9 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import React, { Component } from "react";
 import { StyleSheet, View, ViewPropTypes } from "react-native";
-import { StyleSheet, View, ViewPropTypes } from "react-native";
-import { WebView } from "react-native-webview";
 import { WebView } from "react-native-webview";
 
 import htmlContent from "./injectedHtml";
@@ -40,7 +37,7 @@ export default class SignaturePad extends Component {
     var html = htmlContent(injectedJavaScript); //We don't use WebView's injectedJavaScript because on Android, the WebView re-injects the JavaScript upon every url change. Given that we use url changes to communicate signature changes to the React Native app, the JS is re-injected every time a stroke is drawn.
     this.state = {
       base64DataUrl: props.dataURL || null,
-      key: 1,
+      key: 1,// for reload 
     };
     this.source = { html };
   }
